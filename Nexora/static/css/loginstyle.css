@@ -1,0 +1,11 @@
+.container{
+
+    padding: 100px;
+    margin: 350px;
+    width: 400px;
+    height: 400px;
+    background-color: rgb(242, 249, 247);
+}
+input{
+    gap: 30px;
+}
