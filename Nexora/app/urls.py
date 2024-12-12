@@ -6,8 +6,9 @@ urlpatterns = [
      path('admin1',views.admin_home),
      path('logout',views.AU_logout),
      path('category',views.add_category),
-     path('add_prodect',views.add_product),
+     path('add_prodect',views.add_products),
      path('delete_category/<int:id>/', views.delete_category, name='delete_category'),
+     path('viewproduct',views.view_pro),
 
      
 

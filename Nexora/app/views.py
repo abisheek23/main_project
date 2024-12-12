@@ -35,12 +35,20 @@ def AU_logout(req):
 
 
     
+# def admin_home(req):
+#     if 'admin' in req.session:
+#      data=prodect.objects.all()
+#      return render(req,'admin/adminhome.html',{'product':data})
+#     else:
+#         return redirect(login)
+
 def admin_home(req):
-    # if 'shop' in req.session:
-    #    data=prodect.objects.all(),,{'products':data}
-       return render(req,'admin/adminhome.html')
-    # else:
-    #     return redirect(login)
+    if 'admin' in req.session:
+       data=prodect.objects.all()
+       return render(req,'admin/adminhome.html',{'products':data})
+    else:
+        return redirect(log)
+
 
 def add_category(req):
     if 'admin' in req.session:
@@ -66,9 +74,32 @@ def delete_category(req, id):
     else:
         return redirect(log)
 
-def add_product(req):
-     return render (req,'admin/add_prodects.html')
+# def add_product(req):
+#      return render (req,'admin/add_prodects.html')
+def add_products(req) :
+    if 'admin' in req.session:
+        if req.method=='POST':
+            pid=req.POST['pid']
+            pname=req.POST['name']
+            description=req.POST['description']
+            pprice=req.POST['price']
+            offer_price=req.POST['off_price']
+            cate=req.POST['category']
+            pstock=req.POST['stock']
+            file=req.FILES['image']
+            cat=Category.objects.get(pk=cate)
+            data=prodect.objects.create(pid=pid,name=pname,dis=description,price=pprice,offer_price=offer_price,category=cat,stoct=pstock,img=file)
+            data.save()
+            return redirect(admin_home)
+        else:
+            cate=Category.objects.all()
+            return render(req,'admin/add_prodects.html',{'cate':cate})
+    else:
+        return redirect(login)
 
+def view_pro(req):
+    data=prodect.objects.all()
+    return render(req,'admin/view_product.html',{'product':data})
 
 
        

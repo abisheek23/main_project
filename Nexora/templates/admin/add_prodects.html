@@ -49,10 +49,17 @@
             <input type="number" class="form-control" name="off_price" placeholder="Enter Discounted Price (if any)">
           </div>
           <!-- category-->
+          <!-- Category Dropdown -->
           <div class="mb-3">
-            <label for="off_price" class="form-label">category ($)</label>
-            <input type="" class="form-control" name="category" placeholder="category">
-          </div>
+            <label for="pro_category" class="form-label">Category Name</label>
+            <select class="form-control" id="pro_category" name="category" required>
+                <option value="" disabled selected>Select a Category</option>
+                {% for c in cate %}
+                    <option value="{{ c.pk }}">{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
           
           <!-- Stock -->
           <div class="mb-3">

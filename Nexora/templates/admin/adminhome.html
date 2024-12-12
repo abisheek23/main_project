@@ -27,6 +27,9 @@
                 <a class="nav-link" href="#">veiw bookings</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="viewproduct">veiw products</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link " href="logout">logout</a>
               </li>
             </ul>
@@ -40,5 +43,51 @@
           </div>
 
       </nav>
+
+      <!-- <div class="container">
+        <div class="row">
+          {% for pro in Product %}
+
+            <div class="col -lg-4">
+            <div class="card" style="width:400px">
+              <img class="card-img-top" src="{{pro.img.url}}" alt="Card image" style="width:100%">
+              <div class="card-body">
+              
+    
+                <h2 class="card-title">{{pro.name}}</h2>
+                <h4 class="card-text">{{pro.dis}}</h4>
+                <h2 class="card-title ">{{pro.price}}</h2>
+                <h4 class="card-text">{{pro.off_price}}</h4>
+               
+               
+              </div>
+            </div>
+            </div>
+            {% endfor %}  
+
+        
+            </div>
+       </div>  -->
+
+       <div class="container_pro py-5">
+        <div class="row g-4">
+            {% for pro in Product %}
+            <div class="col-md-4">
+          <div class="card" style="width:400px;height: 450px; ">
+            <img class="card-img-top" src="{{pro.img.url}}" alt="Card image" style="width: 100%; height: 350px;">
+            <div class="card-body">
+              <h4 class="card-title">{{ pro.name }}</h4>
+              <h4 class="card-title">{{ pro.dis }}</h4>
+              <h4 class="card-title">{{ pro.price }}</h4>
+              <h4 class="card-title">{{ pro.offer_price }}</h4>
+              <h4 class="card-title">{{ pro.category }}</h4>
+              <!-- <a href="edit_pro/{{pro.pk}}" class="btn" style="background-color: rgb(244, 222, 222); border: 1px solid;">edit</a>
+              <a href="del_pro/{{pro.pk}}" class="btn" style="background-color: rgb(244, 222, 222);border: 1px solid;">delete</a> -->
+            </div>
+          </div><br>
+        </div>
+          {% endfor %}  
+        </div>
+    </div>
 </body>
 </html>
