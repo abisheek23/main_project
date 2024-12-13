@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import  User
 from django.contrib import messages
 from .models import *
+import os
 
 # Create your views here.
 
@@ -98,8 +99,47 @@ def add_products(req) :
         return redirect(login)
 
 def view_pro(req):
-    data=prodect.objects.all()
-    return render(req,'admin/view_product.html',{'product':data})
+    cate_id=req.GET.get('category',None)
+    cate=Category.objects.all()
+    if cate_id:
+        prodects= prodect.objects.filter(category=cate_id)
+    else:
+         data=prodect.objects.all()
+         return render(req,'admin/view_product.html',{'product':data,'cate':cate,})
+
+
+def edit_product(req,pid):
+    if req.method=='POST':
+        pid=req.POST['pid']
+        pname=req.POST['name']
+        description=req.POST['description']
+        pprice=req.POST['price']
+        offer_price=req.POST['off_price']
+        cate=req.POST['category']
+        pstock=req.POST['stock']
+        file=req.FILES['image']
+        cat=Category.objects.get(pk=cate)
+        if file:
+            prodect.objects.filter(pk=pid).update(pid=pid,name=pname,dis=description,price=pprice,offer_price=offer_price,category=cat,stoct=pstock,img=file)
+            data=prodect.objects.get(pk=pid)
+            data.img=file
+            data.save()
+        else:
+            prodect.objects.filter(pk=pid).update(pid=pid,name=pname,dis=description,price=pprice,offer_price=offer_price,category=cat,stoct=pstock,img=file)
+        return redirect(admin_home)
+
+    else:
+         data=prodect.objects.get(pk=pid)
+         return  render(req,'admin/edit_product.html',{'data':data})
+    
+def delet_product(req,pid):
+    data=prodect.objects.get(pk=pid)
+    file=data.img.url
+    file=file.split('/')[-1]
+    os.remove('media/'+file)
+    data.delete()
+    return redirect(admin_home)
+
 
 
        
