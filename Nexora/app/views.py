@@ -98,34 +98,47 @@ def add_products(req) :
     else:
         return redirect(login)
 
+# def view_pro(req):
+#     cate_id=req.GET.get('category',None)
+#     cate=Category.objects.all()
+#     if cate_id:
+#         prodect= prodect.objects.filter(category=cate_id)
+#     else:
+#          data=prodect.objects.all()
+#          return render(req,'admin/view_product.html',{'product':data,'cate':cate,})
+
 def view_pro(req):
-    cate_id=req.GET.get('category',None)
-    cate=Category.objects.all()
-    if cate_id:
-        prodects= prodect.objects.filter(category=cate_id)
-    else:
-         data=prodect.objects.all()
-         return render(req,'admin/view_product.html',{'product':data,'cate':cate,})
+    cate_id = req.GET.get('category', None)
+    cate = Category.objects.all()  # Fetch all categories
+    
+    if cate_id:  # If category filter is applied
+        products = prodect.objects.filter(category__id=cate_id)  # Filter products based on the category ID
+    else:  # If no category filter is provided
+        products = prodect.objects.all()  # Fetch all products
+
+    # Render the products and categories on the template
+    return render(req, 'admin/view_product.html', {'product': products, 'cate': cate})
+
 
 
 def edit_product(req,pid):
     if req.method=='POST':
-        pid=req.POST['pid']
+        p_id=req.POST['pid']
         pname=req.POST['name']
         description=req.POST['description']
         pprice=req.POST['price']
         offer_price=req.POST['off_price']
         cate=req.POST['category']
         pstock=req.POST['stock']
-        file=req.FILES['image']
-        cat=Category.objects.get(pk=cate)
+        file=req.FILES.get('image')
+        
         if file:
-            prodect.objects.filter(pk=pid).update(pid=pid,name=pname,dis=description,price=pprice,offer_price=offer_price,category=cat,stoct=pstock,img=file)
+            prodect.objects.filter(pk=pid).update(pid=p_id,name=pname,dis=description,price=pprice,offer_price=offer_price,stoct=pstock)
             data=prodect.objects.get(pk=pid)
             data.img=file
             data.save()
         else:
-            prodect.objects.filter(pk=pid).update(pid=pid,name=pname,dis=description,price=pprice,offer_price=offer_price,category=cat,stoct=pstock,img=file)
+            prodect.objects.filter(pk=pid).update(pid=pid,name=pname,dis=description,price=pprice,offer_price=offer_price,stoct=pstock)
         return redirect(admin_home)
 
     else:
