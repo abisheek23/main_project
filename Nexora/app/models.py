@@ -16,3 +16,8 @@ class prodect(models.Model):
     category=models.ForeignKey(Category, on_delete=models.CASCADE)
     stoct=models.IntegerField()
     img=models.FileField()
+
+class Cart(models.Model):
+    product=models.ForeignKey(prodect,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    qty=models.IntegerField()

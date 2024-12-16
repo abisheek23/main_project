@@ -30,7 +30,7 @@
                 <a class="nav-link " href="home">home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link " href="shop">shop</a>
+                <a class="nav-link " href="#">shop</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link " href="#">About</a>
@@ -53,16 +53,16 @@
           <div>
            
           </div>
-          <!-- <div class="dropdown">
+          {% comment %} <div class="dropdown">
             <button class="btn btn-dark dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                shop 
+                filter 
             </button>
             <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
                 {% for category in cate %}
                     <li><a class="dropdown-item" href="?category={{ category.id }}">{{ category.name }}</a></li>
                 {% endfor %}
             </ul>
-          </div>  -->
+          </div> {% endcomment %}
           
       </nav>
       <div class="d-flex flex-row flex-wrap">

@@ -18,5 +18,10 @@ urlpatterns = [
 
      #________user______
      path('register',views.reg),
-     path('',views.user_home)
+     path('home',views.user_home),
+     path('shop',views.shop),
+     path('viewpro/<pid>',views.viewpro),
+     path('cart/<pid>',views.add_to_cart),
+     path('my_cart',views.view_cart),
+     path('delete_cartitem/<int:id>', views.delete_cart_item,name='delete_cartitem' ),
 ]

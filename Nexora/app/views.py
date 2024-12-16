@@ -36,12 +36,7 @@ def AU_logout(req):
 
 
     
-# def admin_home(req):
-#     if 'admin' in req.session:
-#      data=prodect.objects.all()
-#      return render(req,'admin/adminhome.html',{'product':data})
-#     else:
-#         return redirect(login)
+
 
 def admin_home(req):
     if 'admin' in req.session:
@@ -75,8 +70,6 @@ def delete_category(req, id):
     else:
         return redirect(log)
 
-# def add_product(req):
-#      return render (req,'admin/add_prodects.html')
 def add_products(req) :
     if 'admin' in req.session:
         if req.method=='POST':
@@ -98,14 +91,7 @@ def add_products(req) :
     else:
         return redirect(login)
 
-# def view_pro(req):
-#     cate_id=req.GET.get('category',None)
-#     cate=Category.objects.all()
-#     if cate_id:
-#         prodect= prodect.objects.filter(category=cate_id)
-#     else:
-#          data=prodect.objects.all()
-#          return render(req,'admin/view_product.html',{'product':data,'cate':cate,})
+
 
 def view_pro(req):
     cate_id = req.GET.get('category', None)
@@ -176,9 +162,74 @@ def reg(req):
         return render(req,'user/registration.html')
     
 def user_home(req):
+    cate_id = req.GET.get('category', None)
+    cate = Category.objects.all()  
+    
+    if cate_id:  # If category filter is applied
+        products = prodect.objects.filter(category__id=cate_id)  
+    else:  
+        products = prodect.objects.all()  
+   
+
     if 'user' in req.session:
-        return render(req,'user/user_home.html')
+        return render(req,'user/user_home.html', { 'product': products,'cate': cate})
     else:
         return redirect (login)
+    
+def shop(req):
+    cate_id = req.GET.get('category', None)
+    cate = Category.objects.all()  
+    
+    if cate_id:  # If category filter is applied
+        products = prodect.objects.filter(category__id=cate_id)  
+    else:  
+        products = prodect.objects.all()  
+   
+
+    if 'user' in req.session:
+        return render(req,'user/user_home.html', { 'product': products,'cate': cate})
+    else:
+        return redirect (login)
+    
+def viewpro(req,pid):
+    products=prodect.objects.get(pk=pid)
+    if 'user' in req.session:
+       return render(req,'user/viewpro.html',{'product':products})
+    
+def add_to_cart(req,pid):
+    product=prodect.objects.get(pk=pid)
+    user=User.objects.get(username=req.session['user'])
+    try:
+        data=Cart.objects.get(product=product,user=user)
+        data.qty+=1
+        data.save()
+    except:
+        data=Cart.objects.create(product=product,user=user,qty=1)
+        data.save()
+    return redirect(view_cart)
+
+def view_cart(req):
+    user=User.objects.get(username=req.session['user'])
+    data=Cart.objects.filter(user=user)
+
+    return render (req,'user/cart.html',{'cart':data})
+
+def delete_cart_item(req, id):
+    if 'user' in req.session:
+        try:
+            Cartitem = Cart.objects.get(id=id)
+            Cartitem.delete()
+            return redirect(view_cart)
+        except Cart.DoesNotExist:
+            pass  # You can add an error message here if needed
+            return redirect(user_home)
+    else:
+        return redirect(view_cart)
+    
+def qty_in(req,cid):
+    data=Cart.objects.get(pk=cid)
+    data.qty+=1
+    data.save()
+    return redirect(view_cart)
 
     
