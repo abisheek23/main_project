@@ -162,17 +162,11 @@ def reg(req):
         return render(req,'user/registration.html')
     
 def user_home(req):
-    cate_id = req.GET.get('category', None)
-    cate = Category.objects.all()  
-    
-    if cate_id:  # If category filter is applied
-        products = prodect.objects.filter(category__id=cate_id)  
-    else:  
-        products = prodect.objects.all()  
+    products = prodect.objects.all()  
    
 
     if 'user' in req.session:
-        return render(req,'user/user_home.html', { 'product': products,'cate': cate})
+        return render(req,'user/user_home.html', { 'product': products})
     else:
         return redirect (login)
     
@@ -187,7 +181,7 @@ def shop(req):
    
 
     if 'user' in req.session:
-        return render(req,'user/user_home.html', { 'product': products,'cate': cate})
+        return render(req,'user/shop.html', { 'product': products,'cate': cate})
     else:
         return redirect (login)
     
