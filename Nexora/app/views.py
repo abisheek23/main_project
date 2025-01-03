@@ -89,7 +89,7 @@ def add_products(req) :
             cate=Category.objects.all()
             return render(req,'admin/add_prodects.html',{'cate':cate})
     else:
-        return redirect(login)
+        return redirect(log)
 
 
 
@@ -162,11 +162,13 @@ def reg(req):
         return render(req,'user/registration.html')
     
 def user_home(req):
-    products = prodect.objects.all()  
+    products = prodect.objects.all() 
+    
+    cate=Category.objects.all()
    
 
     if 'user' in req.session:
-        return render(req,'user/user_home.html', { 'product': products})
+        return render(req,'user/user_home.html', { 'product': products,'cate':cate})
     else:
         return redirect (login)
     
@@ -177,7 +179,7 @@ def shop(req):
     if cate_id:  # If category filter is applied
         products = prodect.objects.filter(category__id=cate_id)  
     else:  
-        products = prodect.objects.all()  
+        products = prodect.objects.all()[::-1]  
    
 
     if 'user' in req.session:
@@ -204,9 +206,15 @@ def add_to_cart(req,pid):
 
 def view_cart(req):
     user=User.objects.get(username=req.session['user'])
-    data=Cart.objects.filter(user=user)
+    data=Cart.objects.filter(user=user)[::-1] 
 
     return render (req,'user/cart.html',{'cart':data})
+
+def qty_in(req,cid):
+    data=Cart.objects.get(pk=cid)
+    data.qty+=1
+    data.save()
+    return redirect(view_cart)
 
 def delete_cart_item(req, id):
     if 'user' in req.session:
@@ -220,10 +228,48 @@ def delete_cart_item(req, id):
     else:
         return redirect(view_cart)
     
+def qty_dec(req,cid):
+    data=Cart.objects.get(pk=cid)
+    data.qty-=1
+    data.save()
+    print(data.qty)
+    if data.qty==0:
+        data.delete()
+    return redirect(view_cart)
 def qty_in(req,cid):
     data=Cart.objects.get(pk=cid)
     data.qty+=1
     data.save()
     return redirect(view_cart)
 
-    
+
+# def pro_buy(req,pid): # to buy product directly from product_dtls page
+#     product=prodect.objects.get(pk=pid)
+#     user=User.objects.get(username=req.session['user'])
+#     qty=1
+#     price=product.offer_price
+#     buy=Buy.objects.create(product=product,user=user,qty=qty,price=price)
+#     buy.save()
+#     return redirect(bookings)
+
+def bookings(req,pid,aid):
+    product=prodect.objects.get(pk=pid )
+    adress=Adress.objects.get(pk=aid)
+    return render (req,'user/bookings.html',{'products':product,'adress':adress} )
+def add_adress(req,pid):
+    if 'user' in req.session:
+        if req.method=='POST':
+       
+         phno=req.POST['ph_no']
+         state=req.POST['state']
+         district=req.POST['district']
+         adress=req.POST['adress']
+         user=User.objects.get(username=req.session['user'])
+         data=Adress.objects.create(phno=phno,position=state,district=district,Adress=adress,user=user)
+         data.save()
+         return redirect('bookings',pid=pid )
+        return render(req,'user/adress.html')
+    else:
+        return redirect(log)
+
+ 

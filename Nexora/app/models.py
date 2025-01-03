@@ -21,3 +21,17 @@ class Cart(models.Model):
     product=models.ForeignKey(prodect,on_delete=models.CASCADE)
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     qty=models.IntegerField()
+
+class Adress(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    State = [
+        ('1', 'Andhra Pradesh'),
+        ('2', 'Telangana'),
+        ('3', 'kerala'),
+        ('4', 'Tamil Nadu'),
+        ('5', 'Karnataka'),
+    ]
+    phno= models.IntegerField()
+    position = models.CharField(max_length=1, choices=State)
+    district=models.CharField(max_length=25)
+    Adress=models.TextField()
