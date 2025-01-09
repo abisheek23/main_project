@@ -19,13 +19,16 @@ urlpatterns = [
      #________user______
      path('register',views.reg),
      path('home',views.user_home),
-     path('shop',views.shop),
+     path('shop',views.shop,name='shop'),
      path('viewpro/<pid>',views.viewpro),
      path('cart/<pid>',views.add_to_cart),
      path('qty-dic/<cid>',views.qty_dec),
      path('qty-in/<cid>',views.qty_in),
      path('my_cart',views.view_cart),
      path('delete_cartitem/<int:id>', views.delete_cart_item,name='delete_cartitem' ),
-     path('booking/<pid>',views.bookings,name='bookings'),
-     path('address/<pid>/<aid>',views.add_adress),
+     path('pay/<pid>', views.payment, name='pay'),
+    path('bookings', views.bookings, name='bookings'),
+     path('buy/<str:pid>/', views.pro_buy, name='pro_buy'),
+     path('address/<pid>',views.add_adress),
+     path('cart_buy',views.order_details)
 ]
