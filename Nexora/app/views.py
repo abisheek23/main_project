@@ -140,6 +140,10 @@ def delet_product(req,pid):
     data.delete()
     return redirect(admin_home)
 
+def view_orders(req):
+    data=Buy.objects.all()
+    
+    return render (req,'admin/view_orders.html',{'order':data})
 
 
        
@@ -171,7 +175,7 @@ def user_home(req):
     if 'user' in req.session:
         return render(req,'user/user_home.html', { 'product': products,'cate':cate})
     else:
-        return redirect (login)
+        return redirect (log)
     
 def shop(req):
     cate_id = req.GET.get('category', None)
@@ -186,7 +190,7 @@ def shop(req):
     if 'user' in req.session:
         return render(req,'user/shop.html', { 'product': products,'cate': cate})
     else:
-        return redirect (login)
+        return redirect (log)
     
 def viewpro(req,pid):
     products=prodect.objects.get(pk=pid)
@@ -211,11 +215,6 @@ def view_cart(req):
 
     return render (req,'user/cart.html',{'cart':data})
 
-# def qty_in(req,cid):
-#     data=Cart.objects.get(pk=cid)
-#     data.qty+=1
-#     data.save()
-#     return redirect(view_cart)
 
 def delete_cart_item(req, id):
     if 'user' in req.session:
@@ -325,10 +324,6 @@ def bookings(req, ):
             
             return redirect('shop')
             
-        # except Exception as e:
-        #     print(f"Error in pro_buy: {e}")
-        #     return redirect('store')
-    
     return redirect('shop')
 
 
@@ -380,3 +375,23 @@ def order_details(req):
     # Render the response
     return render(req, 'user/cart_buy.html', {'cart': cart_items, 'cart_total': cart_total})
 
+def view_bookings(req):
+    user=User.objects.get(username=req.session['user'])
+    data=Buy.objects.filter(user=user)[::-1] 
+
+    return render (req,'user/view_bookings.html',{'buy':data})
+
+
+def delete_buy_item(req, id):
+    if 'user' in req.session:
+        try:
+            buyitem = Buy.objects.get(id=id)
+            buyitem.delete()
+            return redirect(view_bookings)
+        except Buy.DoesNotExist:
+            pass  # You can add an error message here if needed
+            return redirect(user_home)
+    else:
+        return redirect(view_bookings)
+def about(req):
+    return render (req,'user/about.html')

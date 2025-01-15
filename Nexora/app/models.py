@@ -46,3 +46,5 @@ class Buy(models.Model) :
     price=models.IntegerField(null=True, blank=True)
     date=models.DateField(auto_now_add=True)
     payment_method=models.TextField(null=True, blank=True )
+     
+   
